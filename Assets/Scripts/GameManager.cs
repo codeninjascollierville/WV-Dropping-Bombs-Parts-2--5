@@ -52,12 +52,13 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject bombObject in nextBomb)
         {
-            if (bombObject.transform.position.y < (-screenBounds.y) - 12 || !gameStarted)
+            if (!gameStarted)
             {
                 Destroy(bombObject);
-            }else if(bombObject.transform.position.y < (screenBounds.y) && gameStarted)
+            }else if(bombObject.transform.position.y < (-screenBounds.y) && gameStarted)
             {
                 scoreSystem.GetComponent<Score>().AddScore(pointsWorth);
+                Destroy(bombObject);
             }
         }
         void OnPlayerKilled()
