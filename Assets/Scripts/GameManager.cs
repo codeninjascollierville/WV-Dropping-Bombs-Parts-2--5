@@ -16,13 +16,8 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public int pointsWorth = 1;
     private int score;
-    void Awake()
-    {
-        spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
-        player = playerPrefab;
-        scoreText.enabled = false;
-    }
+
+    private bool smokeCleared = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,8 +31,9 @@ public class GameManager : MonoBehaviour
     {
         if (!gameStarted)
         {
-            if (Input.anyKeyDown)
+            if (Input.anyKeyDown && smokeCleared)
             {
+                smokeCleared = false;
                 ResetGame();
             }
         }
@@ -61,13 +57,6 @@ public class GameManager : MonoBehaviour
                 Destroy(bombObject);
             }
         }
-        void OnPlayerKilled()
-        {
-            spawner.active = false;
-            gameStarted = false;
-
-            splash.SetActive(true);
-        }
     }
     void ResetGame()
     {
@@ -80,5 +69,25 @@ public class GameManager : MonoBehaviour
         scoreText.enabled = true;
         scoreSystem.GetComponent<Score>().score = 0;
         scoreSystem.GetComponent<Score>().Start();
+    }
+    void OnPlayerKilled()
+    {
+        spawner.active = false;
+        gameStarted = false;
+
+        Invoke("SplashScreen", 2f);
+    }
+
+    void SplashScreen()
+    {
+        smokeCleared = true;
+        splash.SetActive(true);
+    }
+    void Awake()
+    {
+        spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        player = playerPrefab;
+        scoreText.enabled = false;
     }
 }
