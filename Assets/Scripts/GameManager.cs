@@ -72,7 +72,11 @@ public class GameManager : MonoBehaviour
             {
                 textColor = "#F00";
             }
-            bestScoreText.text = "<color="; 
+            bestScoreText.text = "<color=" + textColor + ">Best Score: " + bestScore.ToString() + "</color>"; 
+        }
+        else
+        {
+            bestScoreText.text = "";
         }
     }
     void ResetGame()
